@@ -70,6 +70,11 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Root route - redirect to prompts.html
+app.get('/', (req, res) => {
+  res.redirect('/prompts.html');
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📝 API Key configured: ${!!process.env.OPENAI_API_KEY}`);
