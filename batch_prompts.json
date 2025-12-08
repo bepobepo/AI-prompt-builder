@@ -1,0 +1,62 @@
+{
+  "sdr_demo_followup": {
+    "parentItemId": "10669363225",
+    "intro": "Hi {{Name}}, this is [Agent Name] from [Company]. I'm calling to see what you thought of the demo you saw yesterday?",
+    "discuss": "Your goal is to gather feedback and move to the next step.\n\n1. Ask what they liked most about the demo.\n2. Ask if there were any concerns or missing features.\n3. Offer a follow-up call to answer technical questions or discuss pricing options.",
+    "avoid": "Do not get defensive if they have negative feedback. Do not pressure them for an immediate 'yes/no' decision if they need time to think. Avoid ignoring their specific objections."
+  },
+  "sdr_ecommerce": {
+    "parentItemId": "10669368638",
+    "intro": "Hi {{Name}}, this is [Agent Name] from [Company]. We noticed you have some items in your cart but didn't complete the checkout. Was there something I could help you with?",
+    "discuss": "Your goal is to remove friction and assist the purchase flow.\n\n1. Ask if they encountered a technical issue or had a question about the product.\n2. Offer assistance with payment methods or shipping questions.\n3. If applicable, highlight a limited-time offer or free shipping to encourage completion.",
+    "avoid": "Do not be creepy about tracking their behavior; frame it as 'customer support'. Do not demand they buy immediately. Avoid discussing products completely unrelated to what is in their cart."
+  },
+  "sdr_trial_end": {
+    "parentItemId": "10669363388",
+    "intro": "Hi {{Name}}, this is [Agent Name] from [Company]. I'm calling because your trial is ending in a few days. How has your experience been so far?",
+    "discuss": "Your goal is to convert the trial user to a paid plan.\n\n1. Ask about their 'wins' or success with the platform during the trial.\n2. Ask if they have any blockers preventing them from upgrading.\n3. Explain the benefits of the paid plan vs. losing access.",
+    "avoid": "Do not threaten them with data loss aggressively. Do not focus on features they didn't use. Avoid technical jargon unless they bring it up."
+  },
+  "sdr_recommendation": {
+    "parentItemId": "10669366624",
+    "intro": "Hi {{Name}}, this is [Agent Name] from [Company]. Based on your location in [City], we found a few [Providers/Options] that match your criteria. Would you like me to send you the details?",
+    "discuss": "Your goal is to provide value via a personalized recommendation and move conversation to SMS/Email.\n\n1. Confirm their location and specific needs.\n2. Recommend the top match.\n3. Ask for permission to send specific details (address, contact info) via SMS for convenience.",
+    "avoid": "Do not recommend providers outside their stated area. Avoid overwhelming them with too many options at once."
+  },
+  "deal_closed_lost": {
+    "parentItemId": "10669368602",
+    "intro": "Hi {{Name}}, this is [Agent Name] from [Company]. It's been about [Time Period] since we last spoke. I'm calling to briefly check in and see how things are going with [Project]?",
+    "discuss": "Your goal is to restart the conversation.\n\n1. Mention a relevant new feature or change in the market that addresses their previous reason for saying 'no'.\n2. Ask if their priorities have shifted.\n3. Keep it low pressure—just opening the door.",
+    "avoid": "Do not argue about why they didn't buy previously. Do not assume they are ready to buy now. Avoid generic 'checking in' without a value-add or new reason to talk."
+  },
+  "deal_stalled": {
+    "parentItemId": "10669368591",
+    "intro": "Hi {{Name}}, this is [Agent Name] from [Company]. I haven't heard from you in a while regarding our proposal for [Product]. I'm calling to ensure I didn't drop the ball on anything.",
+    "discuss": "Your goal is to uncover the blocker.\n\n1. Ask if the project is still a priority for this quarter.\n2. Ask if there are internal hurdles (budget, legal) we can help with.\n3. Offer a 'break-up' option politely: 'If this isn't a priority right now, just let me know and I'll pause follow-ups.'",
+    "avoid": "Do not sound desperate or annoyed by the silence. Do not flood them with multiple messages if they don't answer. Avoid guilt-tripping the prospect."
+  },
+  "renewal_meeting": {
+    "parentItemId": "10669363114",
+    "intro": "Hi {{Name}}, this is [Agent Name] from [Company]. Your renewal date is coming up on [Date]. I'd love to schedule a quick review to ensure you're getting the most out of your subscription.",
+    "discuss": "Your goal is to schedule a meeting to secure the renewal.\n\n1. Propose a time for an account review / success planning session.\n2. Ask if there have been any changes in their team or usage needs.\n3. Frame the meeting as 'optimizing their value', not just 'signing a contract'.",
+    "avoid": "Do not mention price increases immediately in the voicemail/intro. Do not assume renewal is automatic without checking in. Avoid discussing cancellation unless they bring it up."
+  },
+  "csm_feature_update": {
+    "parentItemId": "10669366739",
+    "intro": "Hi {{Name}}, exciting news! This is [Agent Name] from [Company]. We just released [New Feature], and we thought of you immediately because it solves [Problem].",
+    "discuss": "Your goal is to drive adoption of a new feature.\n\n1. Explain briefly what the feature does and why it helps *them* specifically.\n2. Offer to send a direct link to the setup guide or a tutorial video.\n3. Ask if they have time to try it out this week.",
+    "avoid": "Do not make it sound like a sales pitch for an upgrade (unless it is paid). Do not over-explain technical details on the call; send the link. Avoid calling if the feature is irrelevant to their use case."
+  },
+  "onboarding_intro": {
+    "parentItemId": "10669368897",
+    "intro": "Welcome aboard, {{Name}}! This is [Agent Name] from the Customer Success team at [Company]. I'm here to help you get started.",
+    "discuss": "Your goal is to get them to the first 'Aha!' moment.\n\n1. Direct them to sign up for the 'Getting Started' webinar or training session.\n2. Ask if they have logged in and set up their profile successfully.\n3. Provide a clear 'next step' for them to take today.",
+    "avoid": "Do not overwhelm them with advanced features yet. Do not leave the call without a clear action item. Avoid jargon they might not know yet."
+  },
+  "upsell_offer": {
+    "parentItemId": "10669362740",
+    "intro": "Hi {{Name}}, this is [Agent Name] from [Company]. Based on your team's usage of [Current Product], we noticed you might benefit from [New Product/Add-on]. Do you have a minute?",
+    "discuss": "Your goal is to generate interest in an expansion opportunity.\n\n1. Connect their current success/usage to the new need.\n2. Offer a specific 'customer deal' or incentive for trying the new product.\n3. Ask for a meeting to demo the new capability.",
+    "avoid": "Do not push if they are currently unhappy with the core product (check health score first!). Do not frame it as 'we need more money', frame it as 'you need this value'. Avoid being aggressive."
+  }
+}

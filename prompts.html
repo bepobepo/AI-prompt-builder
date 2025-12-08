@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Prompts Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    /* Custom scrollbar styling */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 4px 0;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #9333ea, #ec4899);
+      border-radius: 10px;
+      border: 2px solid white;
+      background-clip: padding-box;
+      transition: background 0.3s ease;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #7e22ce, #db2777);
+      border: 2px solid white;
+      background-clip: padding-box;
+    }
+
+    /* Firefox scrollbar */
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: #9333ea transparent;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // Icon component
+    const Icon = ({ name, className }) => {
+      const icons = {
+        Copy: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>,
+        Check: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>,
+        MessageSquare: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>,
+        ShieldAlert: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>,
+        User: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>,
+        Menu: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>,
+        X: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>,
+        ChevronRight: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>,
+        ChevronDown: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>,
+        Briefcase: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
+        Users: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
+        RefreshCw: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+      };
+      return icons[name] ? icons[name]() : null;
+    };
+
+    const PromptGenerator = () => {
+      const [selectedCategory, setSelectedCategory] = useState('prospecting');
+      const [selectedUseCaseId, setSelectedUseCaseId] = useState('event_invites_prospect');
+      const [selectedIndustry, setSelectedIndustry] = useState('saas');
+      const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+      const [copiedSection, setCopiedSection] = useState(null);
+      const [showAIGenerator, setShowAIGenerator] = useState(false);
+      const [aiPrompt, setAiPrompt] = useState('');
+      const [aiResponse, setAiResponse] = useState(null);
+      const [isGenerating, setIsGenerating] = useState(false);
+
+      const industries = [
+        { id: 'saas', name: 'SaaS / Technology' },
+        { id: 'healthcare', name: 'Healthcare' },
+        { id: 'construction', name: 'Construction' },
+        { id: 'real_estate', name: 'Real Estate' },
+        { id: 'retail', name: 'Retail / E-commerce' },
+        { id: 'financial', name: 'Financial Services' },
+        { id: 'manufacturing', name: 'Manufacturing' },
+        { id: 'media', name: 'Media / Publishing' },
+        { id: 'professional', name: 'Professional Services' },
+        { id: 'education', name: 'Education' }
+      ];
+
+      const categories = [
+        { id: 'prospecting', name: 'New Customers (Prospecting)', icon: <Icon name="Briefcase" className="w-4 h-4" /> },
+        { id: 'expansion', name: 'Existing Customers (Expansion)', icon: <Icon name="Users" className="w-4 h-4" /> }
+      ];
+
+      const useCases = {
+        prospecting: [
+          { id: 'event_invites_prospect', title: 'Event Invites' },
+          { id: 'sdr_initial_qual', title: 'SDR: Initial Qualification' },
+          { id: 'sdr_outbound_qual', title: 'SDR: Outbound Number Check' },
+          { id: 'sdr_booking', title: 'SDR: Booking Meeting' },
+          { id: 'sdr_missing_details', title: 'SDR: Collecting Details' },
+          { id: 'sdr_demo_followup', title: 'SDR: Demo Follow-up' },
+          { id: 'sdr_ecommerce', title: 'SDR: E-commerce Support' },
+          { id: 'sdr_trial_end', title: 'SDR: Trial Follow-up' },
+          { id: 'sdr_recommendation', title: 'SDR: Product Recommendation' },
+          { id: 'deal_closed_lost', title: 'Deal: Re-engage Closed Lost' },
+          { id: 'deal_stalled', title: 'Deal: Re-engage Stalled' },
+        ],
+        expansion: [
+          { id: 'event_invites_exist', title: 'Event Invites (Existing)' },
+          { id: 'renewal_meeting', title: 'Schedule Renewal Meeting' },
+          { id: 'csm_feature_update', title: 'CSM: New Feature Update' },
+          { id: 'onboarding_intro', title: 'Onboarding Introduction' },
+          { id: 'upsell_offer', title: 'Upsell / New Offering' },
+        ]
+      };
+
+      // Industry-specific terminology
+      const getIndustryContext = (industry) => {
+        const contexts = {
+          saas: { product: 'platform', demo: 'demo', trial: 'trial', customer: 'user' },
+          healthcare: { product: 'service', demo: 'consultation', trial: 'evaluation period', customer: 'patient' },
+          construction: { product: 'solution', demo: 'site visit', trial: 'pilot project', customer: 'contractor' },
+          real_estate: { product: 'service', demo: 'property tour', trial: 'trial listing', customer: 'client' },
+          retail: { product: 'product', demo: 'showcase', trial: 'sample period', customer: 'customer' },
+          financial: { product: 'service', demo: 'portfolio review', trial: 'trial period', customer: 'client' },
+          manufacturing: { product: 'solution', demo: 'facility tour', trial: 'pilot program', customer: 'partner' },
+          media: { product: 'subscription', demo: 'preview', trial: 'trial access', customer: 'subscriber' },
+          professional: { product: 'service', demo: 'consultation', trial: 'trial engagement', customer: 'client' },
+          education: { product: 'program', demo: 'campus tour', trial: 'trial semester', customer: 'student' }
+        };
+        return contexts[industry] || contexts.saas;
+      };
+
+      const getPrompts = (industry) => {
+        const ctx = getIndustryContext(industry);
+        
+        return {
+          // --- PROSPECTING ---
+          event_invites_prospect: {
+            title: 'Event Invites (Prospecting)',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm reaching out to personally invite you to our upcoming event, [Event Name]. Do you have a quick moment?`,
+            discuss: `Your main goal is to drive attendance to the upcoming event. \n\n1. Send the registration link via SMS/Email if they are interested.\n2. Ask if they have any specific questions or topics they hope to see covered (to prep the speakers).\n3. Confirm their tentative attendance or interest level.`,
+            avoid: `Do not spend time discussing unrelated product pricing or technical support issues. Do not pressure them if they say they are busy on that date; simply offer to send a recording link instead. Avoid aggressive sales pitches; keep it invitation-focused.`
+          },
+          sdr_initial_qual: {
+            title: 'SDR: Initial Qualification',
+            intro: `Hello {{Name}}, this is [Agent Name] with [Company]. We noticed you recently engaged with our content regarding [Topic]. Did I catch you at a good time?`,
+            discuss: `Your goal is to gauge interest and qualify the lead for a handover.\n\n1. Ask open-ended questions about their current challenges related to [Topic].\n2. Determine their timeline for finding a solution.\n3. Identify the key decision-maker if possible.\n4. If qualified, propose a time for a deeper discovery call with an Account Executive.`,
+            avoid: `Do not give specific price quotes as it is too early. Do not get bogged down in deep technical troubleshooting. Do not promise specific features without verifying. Avoid being pushy if they are clearly not interested.`
+          },
+          sdr_outbound_qual: {
+            title: 'SDR: Outbound Number Qualification',
+            intro: `Hi, is this {{Name}}? ... Hi {{Name}}, this is [Agent Name] calling from [Company].`,
+            discuss: `Your ONLY goal is to verify that this phone number is valid, connects to the correct person, and that they are open to a future conversation.\n\n1. Confirm the identity of the person answering.\n2. Check if this is the best number to reach them at.\n3. Briefly mention who you are and ask if they are open to receiving an email with more info.`,
+            avoid: `Do not launch into a full sales pitch. Do not try to close a deal. Do not keep them on the line for more than 2 minutes. Avoid asking sensitive information immediately.`
+          },
+          sdr_booking: {
+            title: 'SDR: Booking Meeting',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm following up on our previous exchange to get that meeting scheduled. Do you have your calendar handy?`,
+            discuss: `Your primary objective is to lock in a specific date and time for a meeting.\n\n1. Propose two specific time slots (e.g., 'Tuesday at 2 PM or Wednesday at 10 AM').\n2. Confirm the email address to send the calendar invite to.\n3. Briefly reiterate the value/agenda of the meeting (e.g., 'We'll show you how to save X%').`,
+            avoid: `Do not re-qualify the lead; assume they are interested. Do not be vague about times (e.g., 'sometime next week'). Avoid discussing product details that distract from the scheduling process.`
+          },
+          sdr_missing_details: {
+            title: 'SDR: Collecting Missing Details',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. We're processing your [Application/Account] but I need to clarify a quick detail to move things forward.`,
+            discuss: `Your goal is to fill in missing data fields in the CRM.\n\n1. Polite but direct request for the specific missing information (e.g., Company Size, Job Title, Billing Address).\n2. Explain that this info is needed to complete their setup or unlock a benefit.\n3. Verify the spelling or accuracy of the data provided.`,
+            avoid: `Do not try to upsell or cross-sell during this interaction. Do not make the process feel bureaucratic or tedious. Avoid asking for sensitive info (like passwords) over the phone.`
+          },
+          sdr_demo_followup: {
+            title: 'SDR: Demo Follow-up',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm calling to see what you thought of the ${ctx.demo} you saw yesterday?`,
+            discuss: `Your goal is to gather feedback and move to the next step.\n\n1. Ask what they liked most about the ${ctx.demo}.\n2. Ask if there were any concerns or missing features.\n3. Offer a follow-up call to answer technical questions or discuss pricing options.`,
+            avoid: `Do not get defensive if they have negative feedback. Do not pressure them for an immediate 'yes/no' decision if they need time to think. Avoid ignoring their specific objections.`
+          },
+          sdr_ecommerce: {
+            title: 'SDR: E-commerce Support',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. We noticed you have some items in your cart but didn't complete the checkout. Was there something I could help you with?`,
+            discuss: `Your goal is to remove friction and assist the purchase flow.\n\n1. Ask if they encountered a technical issue or had a question about the ${ctx.product}.\n2. Offer assistance with payment methods or shipping questions.\n3. If applicable, highlight a limited-time offer or free shipping to encourage completion.`,
+            avoid: `Do not be creepy about tracking their behavior; frame it as 'customer support'. Do not demand they buy immediately. Avoid discussing products completely unrelated to what is in their cart.`
+          },
+          sdr_trial_end: {
+            title: 'SDR: Trial Follow-up',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm calling because your ${ctx.trial} is ending in a few days. How has your experience been so far?`,
+            discuss: `Your goal is to convert the ${ctx.trial} ${ctx.customer} to a paid plan.\n\n1. Ask about their 'wins' or success with the ${ctx.product} during the ${ctx.trial}.\n2. Ask if they have any blockers preventing them from upgrading.\n3. Explain the benefits of the paid plan vs. losing access.`,
+            avoid: `Do not threaten them with data loss aggressively. Do not focus on features they didn't use. Avoid technical jargon unless they bring it up.`
+          },
+          sdr_recommendation: {
+            title: 'SDR: Product/Service Recommendation',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. Based on your location in [City], we found a few [Providers/Options] that match your criteria. Would you like me to send you the details?`,
+            discuss: `Your goal is to provide value via a personalized recommendation and move conversation to SMS/Email.\n\n1. Confirm their location and specific needs.\n2. Recommend the top match.\n3. Ask for permission to send specific details (address, contact info) via SMS for convenience.`,
+            avoid: `Do not recommend providers outside their stated area. ${industry === 'healthcare' ? 'Do not give medical advice.' : ''} Avoid overwhelming them with too many options at once.`
+          },
+          deal_closed_lost: {
+            title: 'Deal: Re-engage Closed Lost',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. It's been about [Time Period] since we last spoke. I'm calling to briefly check in and see how things are going with [Project]?`,
+            discuss: `Your goal is to restart the conversation.\n\n1. Mention a relevant new feature or change in the market that addresses their previous reason for saying 'no'.\n2. Ask if their priorities have shifted.\n3. Keep it low pressure—just opening the door.`,
+            avoid: `Do not argue about why they didn't buy previously. Do not assume they are ready to buy now. Avoid generic 'checking in' without a value-add or new reason to talk.`
+          },
+          deal_stalled: {
+            title: 'Deal: Re-engage Stalled Deal',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I haven't heard from you in a while regarding our proposal for [Product]. I'm calling to ensure I didn't drop the ball on anything.`,
+            discuss: `Your goal is to uncover the blocker.\n\n1. Ask if the project is still a priority for this quarter.\n2. Ask if there are internal hurdles (budget, legal) we can help with.\n3. Offer a 'break-up' option politely: 'If this isn't a priority right now, just let me know and I'll pause follow-ups.'`,
+            avoid: `Do not sound desperate or annoyed by the silence. Do not flood them with multiple messages if they don't answer. Avoid guilt-tripping the prospect.`
+          },
+
+          // --- EXPANSION ---
+          event_invites_exist: {
+            title: 'Event Invites (Existing)',
+            intro: `Hi {{Name}}, it's [Agent Name] from [Company]. We're hosting an exclusive event for our ${ctx.customer}s on [Date] and I'm calling to make sure you got the invite.`,
+            discuss: `Your goal is to build community and customer loyalty.\n\n1. Emphasize that this is for *existing* ${ctx.customer}s (networking opportunities).\n2. Highlight sessions relevant to their current use case.\n3. Send registration link and confirm attendance.`,
+            avoid: `Do not treat them like a cold lead. Do not focus on selling new products; focus on value from their current subscription. Avoid being impersonal.`
+          },
+          renewal_meeting: {
+            title: 'Schedule Renewal Meeting',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. Your renewal date is coming up on [Date]. I'd love to schedule a quick review to ensure you're getting the most out of your ${ctx.product}.`,
+            discuss: `Your goal is to schedule a meeting to secure the renewal.\n\n1. Propose a time for an account review / success planning session.\n2. Ask if there have been any changes in their team or usage needs.\n3. Frame the meeting as 'optimizing their value', not just 'signing a contract'.`,
+            avoid: `Do not mention price increases immediately in the voicemail/intro. Do not assume renewal is automatic without checking in. Avoid discussing cancellation unless they bring it up.`
+          },
+          csm_feature_update: {
+            title: 'CSM: New Feature Update',
+            intro: `Hi {{Name}}, exciting news! This is [Agent Name] from [Company]. We just released [New Feature], and we thought of you immediately because it solves [Problem].`,
+            discuss: `Your goal is to drive adoption of a new feature.\n\n1. Explain briefly what the feature does and why it helps *them* specifically.\n2. Offer to send a direct link to the setup guide or a tutorial video.\n3. Ask if they have time to try it out this week.`,
+            avoid: `Do not make it sound like a sales pitch for an upgrade (unless it is paid). Do not over-explain technical details on the call; send the link. Avoid calling if the feature is irrelevant to their use case.`
+          },
+          onboarding_intro: {
+            title: 'Onboarding Introduction',
+            intro: `Welcome aboard, {{Name}}! This is [Agent Name] from the Customer Success team at [Company]. I'm here to help you get started.`,
+            discuss: `Your goal is to get them to the first 'Aha!' moment.\n\n1. Direct them to sign up for the 'Getting Started' webinar or training session.\n2. Ask if they have logged in and set up their profile successfully.\n3. Provide a clear 'next step' for them to take today.`,
+            avoid: `Do not overwhelm them with advanced features yet. Do not leave the call without a clear action item. Avoid jargon they might not know yet.`
+          },
+          upsell_offer: {
+            title: 'Upsell / New Offering',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. Based on your team's usage of [Current Product], we noticed you might benefit from [New Product/Add-on]. Do you have a minute?`,
+            discuss: `Your goal is to generate interest in an expansion opportunity.\n\n1. Connect their current success/usage to the new need.\n2. Offer a specific '${ctx.customer} deal' or incentive for trying the new ${ctx.product}.\n3. Ask for a meeting to demo the new capability.`,
+            avoid: `Do not push if they are currently unhappy with the core ${ctx.product} (check health score first!). Do not frame it as 'we need more money', frame it as 'you need this value'. Avoid being aggressive.`
+          }
+        };
+      };
+
+      const handleCopy = (text, section) => {
+        navigator.clipboard.writeText(text);
+        setCopiedSection(section);
+        setTimeout(() => setCopiedSection(null), 2000);
+      };
+
+      const handleAIGenerate = async () => {
+        if (!aiPrompt.trim()) return;
+        
+        setIsGenerating(true);
+        try {
+          const response = await fetch('/api/generate-prompt', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              prompt: aiPrompt,
+              industry: selectedIndustry,
+              category: selectedCategory
+            }),
+          });
+          
+          if (!response.ok) throw new Error('Failed to generate');
+          
+          const data = await response.json();
+          setAiResponse(data);
+        } catch (error) {
+          alert('Failed to generate prompt. Please try again.');
+          console.error(error);
+        } finally {
+          setIsGenerating(false);
+        }
+      };
+
+      const prompts = getPrompts(selectedIndustry);
+      const currentPrompt = prompts[selectedUseCaseId];
+
+      return (
+        <div className="flex h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 font-sans text-gray-900 overflow-hidden">
+          
+          {/* Sidebar */}
+          <div className={`${isSidebarOpen ? 'w-80' : 'w-0'} bg-white border-r border-gray-100 transition-all duration-300 flex flex-col h-full absolute md:relative z-10 shadow-2xl md:shadow-none`}>
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white">
+              <h2 className="font-bold text-xl flex items-center gap-2">
+                <Icon name="RefreshCw" className="w-6 h-6" /> Agent Prompts
+              </h2>
+              <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-1 hover:bg-white/20 rounded-lg transition-colors">
+                <Icon name="X" className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Industry Selector */}
+            <div className="p-4 border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white">
+              <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wider">
+                Select Your Industry
+              </label>
+              <select
+                value={selectedIndustry}
+                onChange={(e) => setSelectedIndustry(e.target.value)}
+                className="w-full px-4 py-3 text-sm bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm hover:border-purple-300 transition-colors font-medium"
+              >
+                {industries.map((ind) => (
+                  <option key={ind.id} value={ind.id}>{ind.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-3 space-y-6 custom-scrollbar">
+              {categories.map((cat) => (
+                <div key={cat.id}>
+                  <div className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    {cat.icon}
+                    {cat.name}
+                  </div>
+                  <div className="space-y-1">
+                    {useCases[cat.id].map((uc) => (
+                      <button
+                        key={uc.id}
+                        onClick={() => {
+                          setSelectedUseCaseId(uc.id);
+                          setSelectedCategory(cat.id);
+                          if (window.innerWidth < 768) setIsSidebarOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 text-sm rounded-xl transition-all flex items-center justify-between group ${
+                          selectedUseCaseId === uc.id 
+                            ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-900 font-bold shadow-md border-l-4 border-purple-600' 
+                            : 'hover:bg-gray-50 text-gray-700 border-l-4 border-transparent hover:border-purple-300'
+                        }`}
+                      >
+                        {uc.title}
+                        {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 opacity-70" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 flex flex-col h-full overflow-hidden w-full">
+            {/* Hero Header */}
+            <header className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white p-4 md:p-6 shadow-xl">
+              <div className="max-w-6xl mx-auto">
+                <button 
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                  className="mb-2 p-2 hover:bg-white/20 rounded-lg text-white transition-colors inline-flex items-center gap-2 font-medium"
+                >
+                  <Icon name="Menu" className="w-5 h-5" />
+                  {!isSidebarOpen && 'Show Menu'}
+                </button>
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                  <div className="flex-1">
+                    <div className="text-xs font-bold uppercase tracking-wider mb-1 opacity-90">
+                      {categories.find(c => c.id === selectedCategory)?.name}
+                    </div>
+                    <h1 className="text-2xl md:text-3xl font-black mb-2 leading-tight">{currentPrompt.title}</h1>
+                    <p className="text-sm opacity-90 font-medium">Generate perfect prompts for your AI agent in seconds</p>
+                  </div>
+                  <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-sm border-2 border-white/30">
+                    {industries.find(i => i.id === selectedIndustry)?.name}
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            {/* Content Scroll Area */}
+            <main className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
+              <div className="max-w-5xl mx-auto space-y-4">
+                
+                {/* Intro Section */}
+                <div className="bg-white rounded-2xl shadow-lg border border-purple-100 overflow-hidden hover:shadow-purple-200 transition-shadow duration-300">
+                  <div className="bg-gradient-to-r from-purple-500 to-blue-500 px-4 py-3 flex justify-between items-center">
+                    <div className="flex items-center gap-2 text-white">
+                      <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                        <Icon name="User" className="w-4 h-4" />
+                      </div>
+                      <h3 className="text-base font-bold">How should the agent start the conversation?</h3>
+                    </div>
+                    <button 
+                      onClick={() => handleCopy(currentPrompt.intro, 'intro')}
+                      className="bg-white text-purple-600 hover:bg-purple-50 px-3 py-2 rounded-full text-xs font-bold flex items-center gap-1 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                      {copiedSection === 'intro' ? <Icon name="Check" className="w-3 h-3" /> : <Icon name="Copy" className="w-3 h-3" />}
+                      {copiedSection === 'intro' ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-gray-800 whitespace-pre-wrap leading-relaxed font-mono text-sm bg-gradient-to-br from-purple-50 to-blue-50 p-3 rounded-xl border border-purple-100 shadow-inner">
+                      {currentPrompt.intro}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Talk About Section */}
+                <div className="bg-white rounded-2xl shadow-lg border border-green-100 overflow-hidden hover:shadow-green-200 transition-shadow duration-300">
+                  <div className="bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-3 flex justify-between items-center">
+                    <div className="flex items-center gap-2 text-white">
+                      <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                        <Icon name="MessageSquare" className="w-4 h-4" />
+                      </div>
+                      <h3 className="text-base font-bold">What should the agent talk about?</h3>
+                    </div>
+                    <button 
+                      onClick={() => handleCopy(currentPrompt.discuss, 'discuss')}
+                      className="bg-white text-green-600 hover:bg-green-50 px-3 py-2 rounded-full text-xs font-bold flex items-center gap-1 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                      {copiedSection === 'discuss' ? <Icon name="Check" className="w-3 h-3" /> : <Icon name="Copy" className="w-3 h-3" />}
+                      {copiedSection === 'discuss' ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">
+                      {currentPrompt.discuss}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Guardrails Section */}
+                <div className="bg-white rounded-2xl shadow-lg border border-red-100 overflow-hidden hover:shadow-red-200 transition-shadow duration-300">
+                  <div className="bg-gradient-to-r from-red-500 to-pink-500 px-4 py-3 flex justify-between items-center">
+                    <div className="flex items-center gap-2 text-white">
+                      <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                        <Icon name="ShieldAlert" className="w-4 h-4" />
+                      </div>
+                      <h3 className="text-base font-bold">What should the agent avoid? (Guardrails)</h3>
+                    </div>
+                    <button 
+                      onClick={() => handleCopy(currentPrompt.avoid, 'avoid')}
+                      className="bg-white text-red-600 hover:bg-red-50 px-3 py-2 rounded-full text-xs font-bold flex items-center gap-1 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                      {copiedSection === 'avoid' ? <Icon name="Check" className="w-3 h-3" /> : <Icon name="Copy" className="w-3 h-3" />}
+                      {copiedSection === 'avoid' ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">
+                      {currentPrompt.avoid}
+                    </p>
+                  </div>
+                </div>
+
+                {/* AI Generator Section */}
+                <div className="mt-6 bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 rounded-2xl shadow-xl p-6 text-center text-white">
+                  <h2 className="text-2xl font-black mb-2">Need custom prompts?</h2>
+                  <p className="text-sm mb-4 opacity-90">Use AI to generate personalized prompts for your specific needs</p>
+                  <button 
+                    onClick={() => setShowAIGenerator(true)}
+                    className="bg-white text-purple-600 px-6 py-3 rounded-full text-sm font-bold hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105"
+                  >
+                    🤖 Generate with AI
+                  </button>
+                </div>
+
+              </div>
+            </main>
+          </div>
+
+          {/* AI Generator Modal */}
+          {showAIGenerator && (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+                <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 p-6 text-white flex justify-between items-center rounded-t-3xl flex-shrink-0">
+                  <h2 className="text-2xl font-black">🤖 AI Prompt Generator</h2>
+                  <button 
+                    onClick={() => setShowAIGenerator(false)}
+                    className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                  >
+                    <Icon name="X" className="w-6 h-6" />
+                  </button>
+                </div>
+                
+                <div className="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">
+                      Describe the agent behavior you need:
+                    </label>
+                    <textarea
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                      placeholder="Example: Create a prompt for an agent that calls leads who downloaded our whitepaper about cloud security..."
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent min-h-32 text-gray-800"
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleAIGenerate}
+                    disabled={isGenerating || !aiPrompt.trim()}
+                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isGenerating ? 'Generating...' : 'Generate Prompts'}
+                  </button>
+
+                  {aiResponse && (
+                    <div className="space-y-4 mt-6">
+                      <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="font-bold text-purple-900">Introduction</h3>
+                          <button 
+                            onClick={() => handleCopy(aiResponse.intro, 'ai-intro')}
+                            className="text-purple-600 text-xs font-bold"
+                          >
+                            {copiedSection === 'ai-intro' ? 'Copied!' : 'Copy'}
+                          </button>
+                        </div>
+                        <p className="text-gray-800 text-sm leading-relaxed">{aiResponse.intro}</p>
+                      </div>
+
+                      <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="font-bold text-green-900">Discussion Points</h3>
+                          <button 
+                            onClick={() => handleCopy(aiResponse.discuss, 'ai-discuss')}
+                            className="text-green-600 text-xs font-bold"
+                          >
+                            {copiedSection === 'ai-discuss' ? 'Copied!' : 'Copy'}
+                          </button>
+                        </div>
+                        <p className="text-gray-800 text-sm whitespace-pre-wrap leading-relaxed">{aiResponse.discuss}</p>
+                      </div>
+
+                      <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="font-bold text-red-900">Guardrails</h3>
+                          <button 
+                            onClick={() => handleCopy(aiResponse.avoid, 'ai-avoid')}
+                            className="text-red-600 text-xs font-bold"
+                          >
+                            {copiedSection === 'ai-avoid' ? 'Copied!' : 'Copy'}
+                          </button>
+                        </div>
+                        <p className="text-gray-800 text-sm whitespace-pre-wrap leading-relaxed">{aiResponse.avoid}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<PromptGenerator />);
+  </script>
+</body>
+</html>

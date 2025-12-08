@@ -1,0 +1,32 @@
+{
+  "itemMapping": {
+    "Event Invites": "event_invites_prospect",
+    "Qualification (new customers/prospecting)": "sdr_initial_qual",
+    "Schedule meeting w/ existing customers (renewal date is coming up)": "renewal_meeting",
+    "CSM support: new feature update - here's a link you can do now": "csm_feature_update",
+    "Onboarding introduction - sign up for this webinar": "onboarding_intro",
+    "New offering or upsell customer - \"learn about this new product, here's an awesome deal\"": "upsell_offer",
+    "Booking Meeting": "sdr_booking",
+    "Collecting missing details": "sdr_missing_details",
+    "Demo done > offer follow up call": "sdr_demo_followup",
+    "Initial qualification w/ a conversation (gauge interest)": "sdr_initial_qual",
+    "Outbound number qualification (basic) - did the call even connect": "sdr_outbound_qual",
+    "Support during a purchase flow": "sdr_ecommerce",
+    "Follow up on trial about to end": "sdr_trial_end",
+    "Product/service recommendation (example here doctor's based on location) > send specific SMS @Benjamin Poliak": "sdr_recommendation",
+    "Reengaging on a closed lost deal": "deal_closed_lost",
+    "Reengaging on a stalled deal": "deal_stalled"
+  },
+  "industries": [
+    {"id": "saas", "name": "SaaS / Technology"},
+    {"id": "healthcare", "name": "Healthcare"},
+    {"id": "construction", "name": "Construction"},
+    {"id": "real_estate", "name": "Real Estate"},
+    {"id": "retail", "name": "Retail / E-commerce"},
+    {"id": "financial", "name": "Financial Services"},
+    {"id": "manufacturing", "name": "Manufacturing"},
+    {"id": "media", "name": "Media / Publishing"},
+    {"id": "professional", "name": "Professional Services"},
+    {"id": "education", "name": "Education"}
+  ]
+}
