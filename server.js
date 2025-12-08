@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const OpenAI = require('openai');
 
 const app = express();
@@ -14,7 +15,10 @@ const openai = new OpenAI({
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.')); // Serve static files from current directory
+
+// Serve static files from the current directory
+app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // API endpoint for generating prompts
 app.post('/api/generate-prompt', async (req, res) => {
@@ -70,13 +74,25 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Root route - redirect to prompts.html
+// Root route - serve prompts.html
 app.get('/', (req, res) => {
-  res.redirect('/prompts.html');
+  res.sendFile(path.join(__dirname, 'prompts.html'));
+});
+
+// Catch-all route for debugging
+app.use((req, res) => {
+  console.log(`404 - Route not found: ${req.method} ${req.url}`);
+  res.status(404).json({ 
+    error: 'Not Found',
+    path: req.url,
+    message: 'The requested resource was not found'
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📝 API Key configured: ${!!process.env.OPENAI_API_KEY}`);
+  console.log(`📁 Serving static files from: ${__dirname}`);
+  console.log(`📄 Available files: prompts.html, server.js, package.json`);
 });
 
