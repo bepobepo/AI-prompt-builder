@@ -11,32 +11,26 @@
   <style>
     /* Custom scrollbar styling */
     .custom-scrollbar::-webkit-scrollbar {
-      width: 10px;
+      width: 6px;
     }
     
     .custom-scrollbar::-webkit-scrollbar-track {
       background: transparent;
-      margin: 4px 0;
     }
     
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #9333ea, #ec4899);
+      background: #d1d5db;
       border-radius: 10px;
-      border: 2px solid white;
-      background-clip: padding-box;
-      transition: background 0.3s ease;
     }
     
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, #7e22ce, #db2777);
-      border: 2px solid white;
-      background-clip: padding-box;
+      background: #9ca3af;
     }
 
     /* Firefox scrollbar */
     .custom-scrollbar {
       scrollbar-width: thin;
-      scrollbar-color: #9333ea transparent;
+      scrollbar-color: #d1d5db transparent;
     }
   </style>
 </head>
@@ -60,7 +54,7 @@
         ChevronDown: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>,
         Briefcase: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
         Users: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
-        RefreshCw: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+        Sparkles: () => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
       };
       return icons[name] ? icons[name]() : null;
     };
@@ -279,28 +273,28 @@
       const currentPrompt = prompts[selectedUseCaseId];
 
       return (
-        <div className="flex h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 font-sans text-gray-900 overflow-hidden">
+        <div className="flex h-screen bg-slate-50 font-sans text-gray-900 overflow-hidden">
           
           {/* Sidebar */}
-          <div className={`${isSidebarOpen ? 'w-80' : 'w-0'} bg-white border-r border-gray-100 transition-all duration-300 flex flex-col h-full absolute md:relative z-10 shadow-2xl md:shadow-none`}>
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white">
-              <h2 className="font-bold text-xl flex items-center gap-2">
-                <Icon name="RefreshCw" className="w-6 h-6" /> Agent Prompts
+          <div className={`${isSidebarOpen ? 'w-72' : 'w-0'} bg-white border-r border-slate-200 transition-all duration-300 flex flex-col h-full absolute md:relative z-10`}>
+            <div className="p-5 border-b border-slate-200 flex justify-between items-center">
+              <h2 className="font-semibold text-lg text-slate-800 flex items-center gap-2">
+                <span className="text-2xl">🤖</span> Agent Prompts
               </h2>
-              <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-1 hover:bg-white/20 rounded-lg transition-colors">
-                <Icon name="X" className="w-5 h-5" />
+              <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-1 hover:bg-slate-100 rounded-lg transition-colors">
+                <Icon name="X" className="w-5 h-5 text-slate-500" />
               </button>
             </div>
 
             {/* Industry Selector */}
-            <div className="p-4 border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white">
-              <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wider">
-                Select Your Industry
+            <div className="p-4 border-b border-slate-100">
+              <label className="block text-xs font-medium text-slate-500 mb-2 uppercase tracking-wider">
+                Industry
               </label>
               <select
                 value={selectedIndustry}
                 onChange={(e) => setSelectedIndustry(e.target.value)}
-                className="w-full px-4 py-3 text-sm bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm hover:border-purple-300 transition-colors font-medium"
+                className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors"
               >
                 {industries.map((ind) => (
                   <option key={ind.id} value={ind.id}>{ind.name}</option>
@@ -308,14 +302,14 @@
               </select>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-3 space-y-6 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-3 space-y-4 custom-scrollbar">
               {categories.map((cat) => (
                 <div key={cat.id}>
-                  <div className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <div className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-400 uppercase tracking-wider">
                     {cat.icon}
                     {cat.name}
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-0.5">
                     {useCases[cat.id].map((uc) => (
                       <button
                         key={uc.id}
@@ -324,14 +318,14 @@
                           setSelectedCategory(cat.id);
                           if (window.innerWidth < 768) setIsSidebarOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-3 text-sm rounded-xl transition-all flex items-center justify-between group ${
+                        className={`w-full text-left px-3 py-2.5 text-sm rounded-lg transition-all flex items-center justify-between ${
                           selectedUseCaseId === uc.id 
-                            ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-900 font-bold shadow-md border-l-4 border-purple-600' 
-                            : 'hover:bg-gray-50 text-gray-700 border-l-4 border-transparent hover:border-purple-300'
+                            ? 'bg-cyan-50 text-cyan-700 font-medium' 
+                            : 'hover:bg-slate-50 text-slate-600'
                         }`}
                       >
                         {uc.title}
-                        {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 opacity-70" />}
+                        {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 text-cyan-500" />}
                       </button>
                     ))}
                   </div>
@@ -342,116 +336,115 @@
 
           {/* Main Content */}
           <div className="flex-1 flex flex-col h-full overflow-hidden w-full">
-            {/* Hero Header */}
-            <header className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white p-4 md:p-6 shadow-xl">
-              <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <header className="bg-white border-b border-slate-200 p-4 md:p-5">
+              <div className="max-w-4xl mx-auto flex items-center gap-4">
                 <button 
                   onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                  className="mb-2 p-2 hover:bg-white/20 rounded-lg text-white transition-colors inline-flex items-center gap-2 font-medium"
+                  className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
                 >
                   <Icon name="Menu" className="w-5 h-5" />
-                  {!isSidebarOpen && 'Show Menu'}
                 </button>
-                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                  <div className="flex-1">
-                    <div className="text-xs font-bold uppercase tracking-wider mb-1 opacity-90">
-                      {categories.find(c => c.id === selectedCategory)?.name}
-                    </div>
-                    <h1 className="text-2xl md:text-3xl font-black mb-2 leading-tight">{currentPrompt.title}</h1>
-                    <p className="text-sm opacity-90 font-medium">Generate perfect prompts for your AI agent in seconds</p>
+                <div className="flex-1">
+                  <div className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
+                    {categories.find(c => c.id === selectedCategory)?.name}
                   </div>
-                  <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-sm border-2 border-white/30">
-                    {industries.find(i => i.id === selectedIndustry)?.name}
-                  </div>
+                  <h1 className="text-xl md:text-2xl font-semibold text-slate-800">{currentPrompt.title}</h1>
+                </div>
+                <div className="bg-slate-100 px-3 py-1.5 rounded-full text-xs font-medium text-slate-600">
+                  {industries.find(i => i.id === selectedIndustry)?.name}
                 </div>
               </div>
             </header>
 
             {/* Content Scroll Area */}
-            <main className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
-              <div className="max-w-5xl mx-auto space-y-4">
+            <main className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar bg-slate-50">
+              <div className="max-w-4xl mx-auto space-y-4">
                 
                 {/* Intro Section */}
-                <div className="bg-white rounded-2xl shadow-lg border border-purple-100 overflow-hidden hover:shadow-purple-200 transition-shadow duration-300">
-                  <div className="bg-gradient-to-r from-purple-500 to-blue-500 px-4 py-3 flex justify-between items-center">
-                    <div className="flex items-center gap-2 text-white">
-                      <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-                        <Icon name="User" className="w-4 h-4" />
+                <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                  <div className="px-5 py-4 flex justify-between items-center border-b border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-violet-100 p-2 rounded-lg">
+                        <Icon name="User" className="w-4 h-4 text-violet-600" />
                       </div>
-                      <h3 className="text-base font-bold">How should the agent start the conversation?</h3>
+                      <h3 className="font-medium text-slate-800">How should the agent start the conversation?</h3>
                     </div>
                     <button 
                       onClick={() => handleCopy(currentPrompt.intro, 'intro')}
-                      className="bg-white text-purple-600 hover:bg-purple-50 px-3 py-2 rounded-full text-xs font-bold flex items-center gap-1 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                      className="text-slate-400 hover:text-violet-600 px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-colors hover:bg-violet-50"
                     >
-                      {copiedSection === 'intro' ? <Icon name="Check" className="w-3 h-3" /> : <Icon name="Copy" className="w-3 h-3" />}
+                      {copiedSection === 'intro' ? <Icon name="Check" className="w-4 h-4" /> : <Icon name="Copy" className="w-4 h-4" />}
                       {copiedSection === 'intro' ? 'Copied!' : 'Copy'}
                     </button>
                   </div>
-                  <div className="p-4">
-                    <p className="text-gray-800 whitespace-pre-wrap leading-relaxed font-mono text-sm bg-gradient-to-br from-purple-50 to-blue-50 p-3 rounded-xl border border-purple-100 shadow-inner">
+                  <div className="p-5">
+                    <p className="text-slate-700 whitespace-pre-wrap leading-relaxed font-mono text-sm bg-slate-50 p-4 rounded-lg">
                       {currentPrompt.intro}
                     </p>
                   </div>
                 </div>
 
                 {/* Talk About Section */}
-                <div className="bg-white rounded-2xl shadow-lg border border-green-100 overflow-hidden hover:shadow-green-200 transition-shadow duration-300">
-                  <div className="bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-3 flex justify-between items-center">
-                    <div className="flex items-center gap-2 text-white">
-                      <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-                        <Icon name="MessageSquare" className="w-4 h-4" />
+                <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                  <div className="px-5 py-4 flex justify-between items-center border-b border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-emerald-100 p-2 rounded-lg">
+                        <Icon name="MessageSquare" className="w-4 h-4 text-emerald-600" />
                       </div>
-                      <h3 className="text-base font-bold">What should the agent talk about?</h3>
+                      <h3 className="font-medium text-slate-800">What should the agent talk about?</h3>
                     </div>
                     <button 
                       onClick={() => handleCopy(currentPrompt.discuss, 'discuss')}
-                      className="bg-white text-green-600 hover:bg-green-50 px-3 py-2 rounded-full text-xs font-bold flex items-center gap-1 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                      className="text-slate-400 hover:text-emerald-600 px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-colors hover:bg-emerald-50"
                     >
-                      {copiedSection === 'discuss' ? <Icon name="Check" className="w-3 h-3" /> : <Icon name="Copy" className="w-3 h-3" />}
+                      {copiedSection === 'discuss' ? <Icon name="Check" className="w-4 h-4" /> : <Icon name="Copy" className="w-4 h-4" />}
                       {copiedSection === 'discuss' ? 'Copied!' : 'Copy'}
                     </button>
                   </div>
-                  <div className="p-4">
-                    <p className="text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">
+                  <div className="p-5">
+                    <p className="text-slate-700 whitespace-pre-wrap leading-relaxed text-sm">
                       {currentPrompt.discuss}
                     </p>
                   </div>
                 </div>
 
                 {/* Guardrails Section */}
-                <div className="bg-white rounded-2xl shadow-lg border border-red-100 overflow-hidden hover:shadow-red-200 transition-shadow duration-300">
-                  <div className="bg-gradient-to-r from-red-500 to-pink-500 px-4 py-3 flex justify-between items-center">
-                    <div className="flex items-center gap-2 text-white">
-                      <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-                        <Icon name="ShieldAlert" className="w-4 h-4" />
+                <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                  <div className="px-5 py-4 flex justify-between items-center border-b border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-amber-100 p-2 rounded-lg">
+                        <Icon name="ShieldAlert" className="w-4 h-4 text-amber-600" />
                       </div>
-                      <h3 className="text-base font-bold">What should the agent avoid? (Guardrails)</h3>
+                      <h3 className="font-medium text-slate-800">What should the agent avoid? (Guardrails)</h3>
                     </div>
                     <button 
                       onClick={() => handleCopy(currentPrompt.avoid, 'avoid')}
-                      className="bg-white text-red-600 hover:bg-red-50 px-3 py-2 rounded-full text-xs font-bold flex items-center gap-1 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                      className="text-slate-400 hover:text-amber-600 px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-colors hover:bg-amber-50"
                     >
-                      {copiedSection === 'avoid' ? <Icon name="Check" className="w-3 h-3" /> : <Icon name="Copy" className="w-3 h-3" />}
+                      {copiedSection === 'avoid' ? <Icon name="Check" className="w-4 h-4" /> : <Icon name="Copy" className="w-4 h-4" />}
                       {copiedSection === 'avoid' ? 'Copied!' : 'Copy'}
                     </button>
                   </div>
-                  <div className="p-4">
-                    <p className="text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">
+                  <div className="p-5">
+                    <p className="text-slate-700 whitespace-pre-wrap leading-relaxed text-sm">
                       {currentPrompt.avoid}
                     </p>
                   </div>
                 </div>
 
                 {/* AI Generator Section */}
-                <div className="mt-6 bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 rounded-2xl shadow-xl p-6 text-center text-white">
-                  <h2 className="text-2xl font-black mb-2">Need custom prompts?</h2>
-                  <p className="text-sm mb-4 opacity-90">Use AI to generate personalized prompts for your specific needs</p>
+                <div className="bg-slate-900 rounded-xl p-6 text-center">
+                  <div className="flex items-center justify-center gap-2 mb-3">
+                    <Icon name="Sparkles" className="w-5 h-5 text-cyan-400" />
+                    <h2 className="text-lg font-semibold text-white">Need custom prompts?</h2>
+                  </div>
+                  <p className="text-slate-400 text-sm mb-5">Use AI to generate personalized prompts for your specific needs</p>
                   <button 
                     onClick={() => setShowAIGenerator(true)}
-                    className="bg-white text-purple-600 px-6 py-3 rounded-full text-sm font-bold hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105"
+                    className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors"
                   >
-                    🤖 Generate with AI
+                    Generate with AI
                   </button>
                 </div>
 
@@ -461,78 +454,83 @@
 
           {/* AI Generator Modal */}
           {showAIGenerator && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-                <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 p-6 text-white flex justify-between items-center rounded-t-3xl flex-shrink-0">
-                  <h2 className="text-2xl font-black">🤖 AI Prompt Generator</h2>
+            <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[85vh] overflow-hidden flex flex-col">
+                <div className="px-6 py-5 flex justify-between items-center border-b border-slate-200">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-cyan-100 p-2 rounded-lg">
+                      <Icon name="Sparkles" className="w-5 h-5 text-cyan-600" />
+                    </div>
+                    <h2 className="text-lg font-semibold text-slate-800">AI Prompt Generator</h2>
+                  </div>
                   <button 
                     onClick={() => setShowAIGenerator(false)}
-                    className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                    className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
                   >
-                    <Icon name="X" className="w-6 h-6" />
+                    <Icon name="X" className="w-5 h-5 text-slate-400" />
                   </button>
                 </div>
                 
                 <div className="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1">
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Describe the agent behavior you need:
                     </label>
                     <textarea
                       value={aiPrompt}
                       onChange={(e) => setAiPrompt(e.target.value)}
                       placeholder="Example: Create a prompt for an agent that calls leads who downloaded our whitepaper about cloud security..."
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent min-h-32 text-gray-800"
+                      className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent min-h-28 text-slate-800 text-sm resize-none"
                     />
                   </div>
 
                   <button
                     onClick={handleAIGenerate}
                     disabled={isGenerating || !aiPrompt.trim()}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-3 rounded-lg font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isGenerating ? 'Generating...' : 'Generate Prompts'}
                   </button>
 
                   {aiResponse && (
-                    <div className="space-y-4 mt-6">
-                      <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4">
+                    <div className="space-y-3 mt-4">
+                      <div className="bg-violet-50 border border-violet-200 rounded-lg p-4">
                         <div className="flex justify-between items-center mb-2">
-                          <h3 className="font-bold text-purple-900">Introduction</h3>
+                          <h3 className="font-medium text-violet-800 text-sm">Introduction</h3>
                           <button 
                             onClick={() => handleCopy(aiResponse.intro, 'ai-intro')}
-                            className="text-purple-600 text-xs font-bold"
+                            className="text-violet-600 text-xs font-medium hover:underline"
                           >
                             {copiedSection === 'ai-intro' ? 'Copied!' : 'Copy'}
                           </button>
                         </div>
-                        <p className="text-gray-800 text-sm leading-relaxed">{aiResponse.intro}</p>
+                        <p className="text-slate-700 text-sm leading-relaxed">{aiResponse.intro}</p>
                       </div>
 
-                      <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+                      <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
                         <div className="flex justify-between items-center mb-2">
-                          <h3 className="font-bold text-green-900">Discussion Points</h3>
+                          <h3 className="font-medium text-emerald-800 text-sm">Discussion Points</h3>
                           <button 
                             onClick={() => handleCopy(aiResponse.discuss, 'ai-discuss')}
-                            className="text-green-600 text-xs font-bold"
+                            className="text-emerald-600 text-xs font-medium hover:underline"
                           >
                             {copiedSection === 'ai-discuss' ? 'Copied!' : 'Copy'}
                           </button>
                         </div>
-                        <p className="text-gray-800 text-sm whitespace-pre-wrap leading-relaxed">{aiResponse.discuss}</p>
+                        <p className="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">{aiResponse.discuss}</p>
                       </div>
 
-                      <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                         <div className="flex justify-between items-center mb-2">
-                          <h3 className="font-bold text-red-900">Guardrails</h3>
+                          <h3 className="font-medium text-amber-800 text-sm">Guardrails</h3>
                           <button 
                             onClick={() => handleCopy(aiResponse.avoid, 'ai-avoid')}
-                            className="text-red-600 text-xs font-bold"
+                            className="text-amber-600 text-xs font-medium hover:underline"
                           >
                             {copiedSection === 'ai-avoid' ? 'Copied!' : 'Copy'}
                           </button>
                         </div>
-                        <p className="text-gray-800 text-sm whitespace-pre-wrap leading-relaxed">{aiResponse.avoid}</p>
+                        <p className="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">{aiResponse.avoid}</p>
                       </div>
                     </div>
                   )}
