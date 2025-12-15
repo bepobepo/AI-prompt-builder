@@ -85,30 +85,74 @@
 
       const categories = [
         { id: 'prospecting', name: 'New Customers (Prospecting)', icon: <Icon name="Briefcase" className="w-4 h-4" /> },
-        { id: 'expansion', name: 'Existing Customers (Expansion)', icon: <Icon name="Users" className="w-4 h-4" /> }
+        { id: 'expansion', name: 'Existing Customers (Expansion)', icon: <Icon name="Users" className="w-4 h-4" /> },
+        { id: 'internal', name: 'Internal Operations', icon: <Icon name="Users" className="w-4 h-4" /> }
       ];
 
       const useCases = {
-        prospecting: [
-          { id: 'event_invites_prospect', title: 'Event Invites' },
-          { id: 'sdr_initial_qual', title: 'SDR: Initial Qualification' },
-          { id: 'sdr_outbound_qual', title: 'SDR: Outbound Number Check' },
-          { id: 'sdr_booking', title: 'SDR: Booking Meeting' },
-          { id: 'sdr_missing_details', title: 'SDR: Collecting Details' },
-          { id: 'sdr_demo_followup', title: 'SDR: Demo Follow-up' },
-          { id: 'sdr_ecommerce', title: 'SDR: E-commerce Support' },
-          { id: 'sdr_trial_end', title: 'SDR: Trial Follow-up' },
-          { id: 'sdr_recommendation', title: 'SDR: Product Recommendation' },
-          { id: 'deal_closed_lost', title: 'Deal: Re-engage Closed Lost' },
-          { id: 'deal_stalled', title: 'Deal: Re-engage Stalled' },
-        ],
-        expansion: [
-          { id: 'event_invites_exist', title: 'Event Invites (Existing)' },
-          { id: 'renewal_meeting', title: 'Schedule Renewal Meeting' },
-          { id: 'csm_feature_update', title: 'CSM: New Feature Update' },
-          { id: 'onboarding_intro', title: 'Onboarding Introduction' },
-          { id: 'upsell_offer', title: 'Upsell / New Offering' },
-        ]
+        prospecting: {
+          lowStakes: [
+            { id: 'event_invites_prospect', title: 'Event Invites', stakes: 'low' },
+            { id: 'sdr_outbound_qual', title: 'SDR: Outbound Number Check', stakes: 'low' },
+            { id: 'sdr_booking', title: 'SDR: Booking Meeting', stakes: 'low' },
+            { id: 'sdr_missing_details', title: 'SDR: Collecting Details', stakes: 'low' },
+            { id: 'sdr_recommendation', title: 'SDR: Product Recommendation', stakes: 'low' },
+          ],
+          highStakes: [
+            { id: 'sdr_initial_qual', title: 'SDR: Initial Qualification', stakes: 'high' },
+            { id: 'sdr_demo_followup', title: 'SDR: Demo Follow-up', stakes: 'high' },
+            { id: 'sdr_ecommerce', title: 'SDR: E-commerce Support', stakes: 'high' },
+            { id: 'sdr_trial_end', title: 'SDR: Trial Follow-up', stakes: 'high' },
+            { id: 'deal_closed_lost', title: 'Deal: Re-engage Closed Lost', stakes: 'high' },
+            { id: 'deal_stalled', title: 'Deal: Re-engage Stalled', stakes: 'high' },
+          ]
+        },
+        expansion: {
+          lowStakes: [
+            { id: 'event_invites_exist', title: 'Event Invites (Existing)', stakes: 'low' },
+            { id: 'csm_feature_update', title: 'CSM: New Feature Update', stakes: 'low' },
+            { id: 'onboarding_intro', title: 'Onboarding Introduction', stakes: 'low' },
+            { id: 'customer_satisfaction', title: 'Customer Satisfaction Survey', stakes: 'low' },
+            { id: 'appointment_reminder', title: 'Appointment Reminders', stakes: 'low' },
+            { id: 'order_status', title: 'Order Status Follow-up', stakes: 'low' },
+          ],
+          highStakes: [
+            { id: 'renewal_meeting', title: 'Schedule Renewal Meeting', stakes: 'high' },
+            { id: 'upsell_offer', title: 'Upsell / New Offering', stakes: 'high' },
+          ]
+        },
+        internal: {
+          lowStakes: [
+            { id: 'employee_feedback', title: 'Employee Feedback Collection', stakes: 'low' },
+            { id: 'team_meeting', title: 'Team Meeting Scheduling', stakes: 'low' },
+            { id: 'training_reminder', title: 'Training Session Reminders', stakes: 'low' },
+          ],
+          highStakes: []
+        }
+      };
+
+      // Badge component for stakes level
+      const StakesBadge = ({ stakes }) => {
+        if (stakes === 'low') {
+          return <span className="ml-2 px-1.5 py-0.5 text-[10px] font-medium bg-emerald-100 text-emerald-700 rounded">LOW</span>;
+        }
+        return <span className="ml-2 px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 text-amber-700 rounded">HIGH</span>;
+      };
+
+      // Helper to get all use cases for a category as flat array
+      const getAllUseCases = (categoryId) => {
+        const cat = useCases[categoryId];
+        return [...(cat.lowStakes || []), ...(cat.highStakes || [])];
+      };
+
+      // Helper to find a use case by id across all categories
+      const findUseCase = (useCaseId) => {
+        for (const catId of Object.keys(useCases)) {
+          const allCases = getAllUseCases(catId);
+          const found = allCases.find(uc => uc.id === useCaseId);
+          if (found) return { ...found, category: catId };
+        }
+        return null;
       };
 
       // Industry-specific terminology
@@ -230,6 +274,46 @@
             intro: `Hi {{Name}}, this is [Agent Name] from [Company]. Based on your team's usage of [Current Product], we noticed you might benefit from [New Product/Add-on]. Do you have a minute?`,
             discuss: `Your goal is to generate interest in an expansion opportunity.\n\n1. Connect their current success/usage to the new need.\n2. Offer a specific '${ctx.customer} deal' or incentive for trying the new ${ctx.product}.\n3. Ask for a meeting to demo the new capability.`,
             avoid: `Do not push if they are currently unhappy with the core ${ctx.product} (check health score first!). Do not frame it as 'we need more money', frame it as 'you need this value'. Avoid being aggressive.`
+          },
+
+          // --- NEW LOW STAKES - EXPANSION ---
+          customer_satisfaction: {
+            title: 'Customer Satisfaction Survey',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm calling to quickly check in on your experience with us. Do you have about 2 minutes for a brief feedback call?`,
+            discuss: `Your goal is to gather honest feedback about the customer experience.\n\n1. Ask how satisfied they are with the ${ctx.product} on a scale of 1-10.\n2. Ask what one thing we could improve.\n3. Thank them sincerely and let them know their feedback will be shared with the team.`,
+            avoid: `Do not try to sell anything during this call. Do not get defensive about negative feedback. Do not keep them longer than 3 minutes. Avoid asking leading questions that bias their responses.`
+          },
+          appointment_reminder: {
+            title: 'Appointment Reminders',
+            intro: `Hi {{Name}}, this is a friendly reminder from [Company] about your upcoming appointment on [Date] at [Time]. I'm just calling to confirm you'll be able to make it.`,
+            discuss: `Your goal is to confirm the appointment and reduce no-shows.\n\n1. Confirm the date, time, and location/link for the meeting.\n2. Ask if they need to reschedule.\n3. If rescheduling, offer 2-3 alternative times.`,
+            avoid: `Do not discuss anything unrelated to the appointment. Do not pressure them if they need to reschedule. Avoid being robotic—keep it warm and helpful.`
+          },
+          order_status: {
+            title: 'Order Status Follow-up',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm calling with an update on your recent order #[Order Number]. Is now a good time?`,
+            discuss: `Your goal is to proactively inform the customer about their order status.\n\n1. Provide the current status (shipped, delayed, delivered).\n2. Share tracking information if available.\n3. Ask if they have any questions about their order.`,
+            avoid: `Do not upsell or cross-sell during this call. Do not make promises you cannot keep about delivery times. Avoid technical jargon about shipping logistics.`
+          },
+
+          // --- NEW LOW STAKES - INTERNAL ---
+          employee_feedback: {
+            title: 'Employee Feedback Collection',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Department]. We're conducting a quick pulse check to gather feedback from the team. Do you have about 5 minutes?`,
+            discuss: `Your goal is to collect honest internal feedback.\n\n1. Ask about their overall satisfaction with their current role.\n2. Ask what tools or resources would help them do their job better.\n3. Ask if there's anything they'd like leadership to know.\n4. Thank them and assure them feedback is confidential.`,
+            avoid: `Do not share individual responses with managers without consent. Do not ask leading questions. Do not pressure them to give positive feedback. Avoid making promises about changes that haven't been approved.`
+          },
+          team_meeting: {
+            title: 'Team Meeting Scheduling',
+            intro: `Hi {{Name}}, this is [Agent Name] from [Department]. I'm helping coordinate the [Meeting Name] and wanted to check your availability. Do you have a moment?`,
+            discuss: `Your goal is to find a suitable meeting time.\n\n1. Propose 2-3 specific time slots.\n2. Confirm their preferred method (in-person, video, phone).\n3. Let them know you'll send a calendar invite once confirmed.`,
+            avoid: `Do not schedule over existing commitments without checking. Do not be inflexible about times. Avoid lengthy discussions about the meeting agenda—just focus on scheduling.`
+          },
+          training_reminder: {
+            title: 'Training Session Reminders',
+            intro: `Hi {{Name}}, this is a reminder from [Department] about your upcoming training session: [Training Name] on [Date] at [Time]. Just wanted to make sure you have it on your calendar.`,
+            discuss: `Your goal is to ensure attendance at the training.\n\n1. Confirm they're aware of the training and can attend.\n2. Share any pre-work or materials they should review beforehand.\n3. Provide the location or video link.`,
+            avoid: `Do not lecture them about the importance of training. Do not share confidential information about other attendees. Avoid being condescending—treat them as professionals.`
           }
         };
       };
@@ -271,6 +355,7 @@
 
       const prompts = getPrompts(selectedIndustry);
       const currentPrompt = prompts[selectedUseCaseId];
+      const currentUseCase = findUseCase(selectedUseCaseId);
 
       return (
         <div className="flex h-screen bg-slate-50 font-sans text-gray-900 overflow-hidden">
@@ -309,26 +394,72 @@
                     {cat.icon}
                     {cat.name}
                   </div>
-                  <div className="space-y-0.5">
-                    {useCases[cat.id].map((uc) => (
-                      <button
-                        key={uc.id}
-                        onClick={() => {
-                          setSelectedUseCaseId(uc.id);
-                          setSelectedCategory(cat.id);
-                          if (window.innerWidth < 768) setIsSidebarOpen(false);
-                        }}
-                        className={`w-full text-left px-3 py-2.5 text-sm rounded-lg transition-all flex items-center justify-between ${
-                          selectedUseCaseId === uc.id 
-                            ? 'bg-cyan-50 text-cyan-700 font-medium' 
-                            : 'hover:bg-slate-50 text-slate-600'
-                        }`}
-                      >
-                        {uc.title}
-                        {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 text-cyan-500" />}
-                      </button>
-                    ))}
-                  </div>
+                  
+                  {/* Low Stakes Sub-group */}
+                  {useCases[cat.id].lowStakes.length > 0 && (
+                    <div className="mb-2">
+                      <div className="px-3 py-1.5 text-[10px] font-semibold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                        Low Stakes
+                      </div>
+                      <div className="space-y-0.5">
+                        {useCases[cat.id].lowStakes.map((uc) => (
+                          <button
+                            key={uc.id}
+                            onClick={() => {
+                              setSelectedUseCaseId(uc.id);
+                              setSelectedCategory(cat.id);
+                              if (window.innerWidth < 768) setIsSidebarOpen(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-all flex items-center justify-between ${
+                              selectedUseCaseId === uc.id 
+                                ? 'bg-cyan-50 text-cyan-700 font-medium' 
+                                : 'hover:bg-slate-50 text-slate-600'
+                            }`}
+                          >
+                            <span className="flex items-center">
+                              {uc.title}
+                              <StakesBadge stakes={uc.stakes} />
+                            </span>
+                            {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 text-cyan-500" />}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* High Stakes Sub-group */}
+                  {useCases[cat.id].highStakes.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1.5 text-[10px] font-semibold text-amber-600 uppercase tracking-wider flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                        High Stakes
+                      </div>
+                      <div className="space-y-0.5">
+                        {useCases[cat.id].highStakes.map((uc) => (
+                          <button
+                            key={uc.id}
+                            onClick={() => {
+                              setSelectedUseCaseId(uc.id);
+                              setSelectedCategory(cat.id);
+                              if (window.innerWidth < 768) setIsSidebarOpen(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-all flex items-center justify-between ${
+                              selectedUseCaseId === uc.id 
+                                ? 'bg-cyan-50 text-cyan-700 font-medium' 
+                                : 'hover:bg-slate-50 text-slate-600'
+                            }`}
+                          >
+                            <span className="flex items-center">
+                              {uc.title}
+                              <StakesBadge stakes={uc.stakes} />
+                            </span>
+                            {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 text-cyan-500" />}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -349,7 +480,10 @@
                   <div className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
                     {categories.find(c => c.id === selectedCategory)?.name}
                   </div>
-                  <h1 className="text-xl md:text-2xl font-semibold text-slate-800">{currentPrompt.title}</h1>
+                  <h1 className="text-xl md:text-2xl font-semibold text-slate-800 flex items-center gap-2">
+                    {currentPrompt.title}
+                    {currentUseCase && <StakesBadge stakes={currentUseCase.stakes} />}
+                  </h1>
                 </div>
                 <div className="bg-slate-100 px-3 py-1.5 rounded-full text-xs font-medium text-slate-600">
                   {industries.find(i => i.id === selectedIndustry)?.name}
