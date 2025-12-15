@@ -188,32 +188,32 @@
           // --- PROSPECTING ---
           event_invites_prospect: {
             title: 'Event Invites (Prospecting)',
-            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm reaching out to personally invite you to our upcoming event, [Event Name]. Do you have a quick moment?`,
-            discuss: `Your main goal is to drive attendance to the upcoming event. \n\n1. Send the registration link via SMS/Email if they are interested.\n2. Ask if they have any specific questions or topics they hope to see covered (to prep the speakers).\n3. Confirm their tentative attendance or interest level.`,
-            avoid: `Do not spend time discussing unrelated product pricing or technical support issues. Do not pressure them if they say they are busy on that date; simply offer to send a recording link instead. Avoid aggressive sales pitches; keep it invitation-focused.`
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm reaching out to personally invite you to our upcoming event about ${ctx.product} innovation, [Event Name]. Do you have a quick moment?`,
+            discuss: `Your main goal is to drive attendance to the upcoming event. \n\n1. Send the registration link via SMS/Email if they are interested.\n2. Ask if they have any specific questions about our ${ctx.product} or topics they hope to see covered (to prep the speakers).\n3. Confirm their tentative attendance or interest level.`,
+            avoid: `Do not spend time discussing ${ctx.product} pricing or technical support issues. Do not pressure them if they say they are busy on that date; simply offer to send a recording link instead. Avoid aggressive sales pitches; keep it invitation-focused.`
           },
           sdr_initial_qual: {
             title: 'SDR: Initial Qualification',
-            intro: `Hello {{Name}}, this is [Agent Name] with [Company]. We noticed you recently engaged with our content regarding [Topic]. Did I catch you at a good time?`,
-            discuss: `Your goal is to gauge interest and qualify the lead for a handover.\n\n1. Ask open-ended questions about their current challenges related to [Topic].\n2. Determine their timeline for finding a solution.\n3. Identify the key decision-maker if possible.\n4. If qualified, propose a time for a deeper discovery call with an Account Executive.`,
-            avoid: `Do not give specific price quotes as it is too early. Do not get bogged down in deep technical troubleshooting. Do not promise specific features without verifying. Avoid being pushy if they are clearly not interested.`
+            intro: `Hello {{Name}}, this is [Agent Name] with [Company]. We noticed you recently engaged with our content about our ${ctx.product}. Did I catch you at a good time?`,
+            discuss: `Your goal is to gauge interest and qualify the lead for a handover.\n\n1. Ask open-ended questions about their current challenges that our ${ctx.product} could address.\n2. Determine their timeline for finding a solution.\n3. Identify the key decision-maker if possible.\n4. If qualified, propose a time for a ${ctx.demo} with an Account Executive.`,
+            avoid: `Do not give specific ${ctx.product} price quotes as it is too early. Do not get bogged down in deep technical troubleshooting. Do not promise specific features without verifying. Avoid being pushy if they are clearly not interested.`
           },
           sdr_outbound_qual: {
             title: 'SDR: Outbound Number Qualification',
             intro: `Hi, is this {{Name}}? ... Hi {{Name}}, this is [Agent Name] calling from [Company].`,
-            discuss: `Your ONLY goal is to verify that this phone number is valid, connects to the correct person, and that they are open to a future conversation.\n\n1. Confirm the identity of the person answering.\n2. Check if this is the best number to reach them at.\n3. Briefly mention who you are and ask if they are open to receiving an email with more info.`,
-            avoid: `Do not launch into a full sales pitch. Do not try to close a deal. Do not keep them on the line for more than 2 minutes. Avoid asking sensitive information immediately.`
+            discuss: `Your ONLY goal is to verify that this phone number is valid, connects to the correct person, and that they are open to a future conversation.\n\n1. Confirm the identity of the person answering.\n2. Check if this is the best number to reach them at.\n3. Briefly mention you're calling about our ${ctx.product} and ask if they are open to receiving an email with more info.`,
+            avoid: `Do not launch into a full ${ctx.product} sales pitch. Do not try to close a deal. Do not keep them on the line for more than 2 minutes. Avoid asking sensitive information immediately.`
           },
           sdr_booking: {
             title: 'SDR: Booking Meeting',
-            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm following up on our previous exchange to get that meeting scheduled. Do you have your calendar handy?`,
-            discuss: `Your primary objective is to lock in a specific date and time for a meeting.\n\n1. Propose two specific time slots (e.g., 'Tuesday at 2 PM or Wednesday at 10 AM').\n2. Confirm the email address to send the calendar invite to.\n3. Briefly reiterate the value/agenda of the meeting (e.g., 'We'll show you how to save X%').`,
-            avoid: `Do not re-qualify the lead; assume they are interested. Do not be vague about times (e.g., 'sometime next week'). Avoid discussing product details that distract from the scheduling process.`
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm following up on our previous exchange to get that ${ctx.demo} scheduled. Do you have your calendar handy?`,
+            discuss: `Your primary objective is to lock in a specific date and time for a ${ctx.demo}.\n\n1. Propose two specific time slots (e.g., 'Tuesday at 2 PM or Wednesday at 10 AM').\n2. Confirm the email address to send the calendar invite to.\n3. Briefly reiterate the value/agenda of the ${ctx.demo} (e.g., 'We'll show you how our ${ctx.product} can help you save X%').`,
+            avoid: `Do not re-qualify the lead; assume they are interested. Do not be vague about times (e.g., 'sometime next week'). Avoid discussing ${ctx.product} details that distract from the scheduling process.`
           },
           sdr_missing_details: {
             title: 'SDR: Collecting Missing Details',
-            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. We're processing your [Application/Account] but I need to clarify a quick detail to move things forward.`,
-            discuss: `Your goal is to fill in missing data fields in the CRM.\n\n1. Polite but direct request for the specific missing information (e.g., Company Size, Job Title, Billing Address).\n2. Explain that this info is needed to complete their setup or unlock a benefit.\n3. Verify the spelling or accuracy of the data provided.`,
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. We're processing your ${ctx.product} setup but I need to clarify a quick detail to move things forward.`,
+            discuss: `Your goal is to fill in missing data fields in the CRM.\n\n1. Polite but direct request for the specific missing information (e.g., Company Size, Job Title, Billing Address).\n2. Explain that this info is needed to complete their ${ctx.product} setup or unlock a benefit.\n3. Verify the spelling or accuracy of the data provided.`,
             avoid: `Do not try to upsell or cross-sell during this interaction. Do not make the process feel bureaucratic or tedious. Avoid asking for sensitive info (like passwords) over the phone.`
           },
           sdr_demo_followup: {
@@ -242,15 +242,15 @@
           },
           deal_closed_lost: {
             title: 'Deal: Re-engage Closed Lost',
-            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. It's been about [Time Period] since we last spoke. I'm calling to briefly check in and see how things are going with [Project]?`,
-            discuss: `Your goal is to restart the conversation.\n\n1. Mention a relevant new feature or change in the market that addresses their previous reason for saying 'no'.\n2. Ask if their priorities have shifted.\n3. Keep it low pressure—just opening the door.`,
-            avoid: `Do not argue about why they didn't buy previously. Do not assume they are ready to buy now. Avoid generic 'checking in' without a value-add or new reason to talk.`
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. It's been about [Time Period] since we last spoke about our ${ctx.product}. I'm calling to briefly check in and see how things are going?`,
+            discuss: `Your goal is to restart the conversation.\n\n1. Mention a relevant new ${ctx.product} feature or change in the market that addresses their previous reason for saying 'no'.\n2. Ask if their priorities have shifted.\n3. Keep it low pressure—just opening the door for a future ${ctx.demo}.`,
+            avoid: `Do not argue about why they didn't choose our ${ctx.product} previously. Do not assume they are ready to buy now. Avoid generic 'checking in' without a value-add or new reason to talk.`
           },
           deal_stalled: {
             title: 'Deal: Re-engage Stalled Deal',
-            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I haven't heard from you in a while regarding our proposal for [Product]. I'm calling to ensure I didn't drop the ball on anything.`,
-            discuss: `Your goal is to uncover the blocker.\n\n1. Ask if the project is still a priority for this quarter.\n2. Ask if there are internal hurdles (budget, legal) we can help with.\n3. Offer a 'break-up' option politely: 'If this isn't a priority right now, just let me know and I'll pause follow-ups.'`,
-            avoid: `Do not sound desperate or annoyed by the silence. Do not flood them with multiple messages if they don't answer. Avoid guilt-tripping the prospect.`
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I haven't heard from you in a while regarding our ${ctx.product} proposal. I'm calling to ensure I didn't drop the ball on anything.`,
+            discuss: `Your goal is to uncover the blocker.\n\n1. Ask if implementing our ${ctx.product} is still a priority for this quarter.\n2. Ask if there are internal hurdles (budget, legal) we can help with.\n3. Offer a 'break-up' option politely: 'If this isn't a priority right now, just let me know and I'll pause follow-ups.'`,
+            avoid: `Do not sound desperate or annoyed by the silence. Do not flood them with multiple messages if they don't answer. Avoid guilt-tripping the prospect about the ${ctx.product} decision.`
           },
 
           // --- EXPANSION ---
@@ -268,15 +268,15 @@
           },
           csm_feature_update: {
             title: 'CSM: New Feature Update',
-            intro: `Hi {{Name}}, exciting news! This is [Agent Name] from [Company]. We just released [New Feature], and we thought of you immediately because it solves [Problem].`,
-            discuss: `Your goal is to drive adoption of a new feature.\n\n1. Explain briefly what the feature does and why it helps *them* specifically.\n2. Offer to send a direct link to the setup guide or a tutorial video.\n3. Ask if they have time to try it out this week.`,
-            avoid: `Do not make it sound like a sales pitch for an upgrade (unless it is paid). Do not over-explain technical details on the call; send the link. Avoid calling if the feature is irrelevant to their use case.`
+            intro: `Hi {{Name}}, exciting news! This is [Agent Name] from [Company]. We just released a new capability for our ${ctx.product}, and we thought of you immediately because it solves [Problem].`,
+            discuss: `Your goal is to drive adoption of a new ${ctx.product} feature.\n\n1. Explain briefly what the feature does and why it helps *them* as a ${ctx.customer} specifically.\n2. Offer to send a direct link to the setup guide or a tutorial video.\n3. Ask if they have time to try it out this week.`,
+            avoid: `Do not make it sound like a sales pitch for an upgrade (unless it is paid). Do not over-explain technical ${ctx.product} details on the call; send the link. Avoid calling if the feature is irrelevant to their use case.`
           },
           onboarding_intro: {
             title: 'Onboarding Introduction',
-            intro: `Welcome aboard, {{Name}}! This is [Agent Name] from the Customer Success team at [Company]. I'm here to help you get started.`,
-            discuss: `Your goal is to get them to the first 'Aha!' moment.\n\n1. Direct them to sign up for the 'Getting Started' webinar or training session.\n2. Ask if they have logged in and set up their profile successfully.\n3. Provide a clear 'next step' for them to take today.`,
-            avoid: `Do not overwhelm them with advanced features yet. Do not leave the call without a clear action item. Avoid jargon they might not know yet.`
+            intro: `Welcome aboard, {{Name}}! This is [Agent Name] from the Customer Success team at [Company]. I'm here to help you get started with our ${ctx.product}.`,
+            discuss: `Your goal is to get the new ${ctx.customer} to the first 'Aha!' moment.\n\n1. Direct them to sign up for the 'Getting Started' webinar or training session for our ${ctx.product}.\n2. Ask if they have logged in and set up their profile successfully.\n3. Provide a clear 'next step' for them to take today.`,
+            avoid: `Do not overwhelm them with advanced ${ctx.product} features yet. Do not leave the call without a clear action item. Avoid jargon they might not know yet.`
           },
           upsell_offer: {
             title: 'Upsell / New Offering',
@@ -294,14 +294,14 @@
           },
           appointment_reminder: {
             title: 'Appointment Reminders',
-            intro: `Hi {{Name}}, this is a friendly reminder from [Company] about your upcoming appointment on [Date] at [Time]. I'm just calling to confirm you'll be able to make it.`,
-            discuss: `Your goal is to confirm the appointment and reduce no-shows.\n\n1. Confirm the date, time, and location/link for the meeting.\n2. Ask if they need to reschedule.\n3. If rescheduling, offer 2-3 alternative times.`,
-            avoid: `Do not discuss anything unrelated to the appointment. Do not pressure them if they need to reschedule. Avoid being robotic—keep it warm and helpful.`
+            intro: `Hi {{Name}}, this is a friendly reminder from [Company] about your upcoming ${ctx.demo} on [Date] at [Time]. I'm just calling to confirm you'll be able to make it.`,
+            discuss: `Your goal is to confirm the ${ctx.demo} and reduce no-shows.\n\n1. Confirm the date, time, and location/link for the ${ctx.demo}.\n2. Ask if they need to reschedule.\n3. If rescheduling, offer 2-3 alternative times.`,
+            avoid: `Do not discuss ${ctx.product} details unrelated to the ${ctx.demo}. Do not pressure them if they need to reschedule. Avoid being robotic—keep it warm and helpful.`
           },
           order_status: {
             title: 'Order Status Follow-up',
-            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm calling with an update on your recent order #[Order Number]. Is now a good time?`,
-            discuss: `Your goal is to proactively inform the customer about their order status.\n\n1. Provide the current status (shipped, delayed, delivered).\n2. Share tracking information if available.\n3. Ask if they have any questions about their order.`,
+            intro: `Hi {{Name}}, this is [Agent Name] from [Company]. I'm calling with an update on your recent ${ctx.product} order #[Order Number]. Is now a good time?`,
+            discuss: `Your goal is to proactively inform the ${ctx.customer} about their order status.\n\n1. Provide the current status (shipped, delayed, delivered).\n2. Share tracking information if available.\n3. Ask if they have any questions about their ${ctx.product} order.`,
             avoid: `Do not upsell or cross-sell during this call. Do not make promises you cannot keep about delivery times. Avoid technical jargon about shipping logistics.`
           },
 
@@ -320,8 +320,8 @@
           },
           training_reminder: {
             title: 'Training Session Reminders',
-            intro: `Hi {{Name}}, this is a reminder from [Department] about your upcoming training session: [Training Name] on [Date] at [Time]. Just wanted to make sure you have it on your calendar.`,
-            discuss: `Your goal is to ensure attendance at the training.\n\n1. Confirm they're aware of the training and can attend.\n2. Share any pre-work or materials they should review beforehand.\n3. Provide the location or video link.`,
+            intro: `Hi {{Name}}, this is a reminder from [Department] about your upcoming ${ctx.product} training session: [Training Name] on [Date] at [Time]. Just wanted to make sure you have it on your calendar.`,
+            discuss: `Your goal is to ensure attendance at the ${ctx.product} training.\n\n1. Confirm they're aware of the training and can attend.\n2. Share any pre-work or materials they should review beforehand about the ${ctx.product}.\n3. Provide the location or video link.`,
             avoid: `Do not lecture them about the importance of training. Do not share confidential information about other attendees. Avoid being condescending—treat them as professionals.`
           }
         };
