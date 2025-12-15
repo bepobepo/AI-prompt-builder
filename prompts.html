@@ -69,6 +69,15 @@
       const [aiPrompt, setAiPrompt] = useState('');
       const [aiResponse, setAiResponse] = useState(null);
       const [isGenerating, setIsGenerating] = useState(false);
+      const [collapsedSections, setCollapsedSections] = useState({});
+
+      // Toggle collapse for a section
+      const toggleSection = (sectionKey) => {
+        setCollapsedSections(prev => ({
+          ...prev,
+          [sectionKey]: !prev[sectionKey]
+        }));
+      };
 
       const industries = [
         { id: 'saas', name: 'SaaS / Technology' },
@@ -131,12 +140,12 @@
         }
       };
 
-      // Badge component for stakes level
+      // Badge component for stakes level - only show LOW badge
       const StakesBadge = ({ stakes }) => {
         if (stakes === 'low') {
           return <span className="ml-2 px-1.5 py-0.5 text-[10px] font-medium bg-emerald-100 text-emerald-700 rounded">LOW</span>;
         }
-        return <span className="ml-2 px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 text-amber-700 rounded">HIGH</span>;
+        return null; // Don't show badge for high stakes
       };
 
       // Helper to get all use cases for a category as flat array
@@ -387,77 +396,115 @@
               </select>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-3 space-y-4 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar">
               {categories.map((cat) => (
-                <div key={cat.id}>
-                  <div className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    {cat.icon}
-                    {cat.name}
-                  </div>
+                <div key={cat.id} className="border border-slate-200 rounded-lg overflow-hidden">
+                  {/* Category Header - Collapsible */}
+                  <button
+                    onClick={() => toggleSection(cat.id)}
+                    className="w-full flex items-center justify-between gap-2 px-3 py-2.5 text-xs font-medium text-slate-600 uppercase tracking-wider bg-slate-50 hover:bg-slate-100 transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      {cat.icon}
+                      {cat.name}
+                    </span>
+                    <Icon 
+                      name={collapsedSections[cat.id] ? "ChevronRight" : "ChevronDown"} 
+                      className="w-4 h-4 text-slate-400" 
+                    />
+                  </button>
                   
-                  {/* Low Stakes Sub-group */}
-                  {useCases[cat.id].lowStakes.length > 0 && (
-                    <div className="mb-2">
-                      <div className="px-3 py-1.5 text-[10px] font-semibold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-                        Low Stakes
-                      </div>
-                      <div className="space-y-0.5">
-                        {useCases[cat.id].lowStakes.map((uc) => (
+                  {/* Collapsible Content */}
+                  {!collapsedSections[cat.id] && (
+                    <div className="p-2 space-y-3">
+                      {/* Low Stakes Sub-group */}
+                      {useCases[cat.id].lowStakes.length > 0 && (
+                        <div>
                           <button
-                            key={uc.id}
-                            onClick={() => {
-                              setSelectedUseCaseId(uc.id);
-                              setSelectedCategory(cat.id);
-                              if (window.innerWidth < 768) setIsSidebarOpen(false);
-                            }}
-                            className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-all flex items-center justify-between ${
-                              selectedUseCaseId === uc.id 
-                                ? 'bg-cyan-50 text-cyan-700 font-medium' 
-                                : 'hover:bg-slate-50 text-slate-600'
-                            }`}
+                            onClick={() => toggleSection(`${cat.id}-low`)}
+                            className="w-full px-2 py-1.5 text-[10px] font-semibold text-emerald-600 uppercase tracking-wider flex items-center justify-between hover:bg-emerald-50 rounded transition-colors"
                           >
-                            <span className="flex items-center">
-                              {uc.title}
-                              <StakesBadge stakes={uc.stakes} />
+                            <span className="flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                              Low Stakes
+                              <span className="text-emerald-400 font-normal">({useCases[cat.id].lowStakes.length})</span>
                             </span>
-                            {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 text-cyan-500" />}
+                            <Icon 
+                              name={collapsedSections[`${cat.id}-low`] ? "ChevronRight" : "ChevronDown"} 
+                              className="w-3 h-3 text-emerald-400" 
+                            />
                           </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* High Stakes Sub-group */}
-                  {useCases[cat.id].highStakes.length > 0 && (
-                    <div>
-                      <div className="px-3 py-1.5 text-[10px] font-semibold text-amber-600 uppercase tracking-wider flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
-                        High Stakes
-                      </div>
-                      <div className="space-y-0.5">
-                        {useCases[cat.id].highStakes.map((uc) => (
+                          {!collapsedSections[`${cat.id}-low`] && (
+                            <div className="space-y-0.5 mt-1">
+                              {useCases[cat.id].lowStakes.map((uc) => (
+                                <button
+                                  key={uc.id}
+                                  onClick={() => {
+                                    setSelectedUseCaseId(uc.id);
+                                    setSelectedCategory(cat.id);
+                                    if (window.innerWidth < 768) setIsSidebarOpen(false);
+                                  }}
+                                  className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-all flex items-center justify-between ${
+                                    selectedUseCaseId === uc.id 
+                                      ? 'bg-cyan-50 text-cyan-700 font-medium' 
+                                      : 'hover:bg-slate-50 text-slate-600'
+                                  }`}
+                                >
+                                  <span className="flex items-center">
+                                    {uc.title}
+                                    <StakesBadge stakes={uc.stakes} />
+                                  </span>
+                                  {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 text-cyan-500" />}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* High Stakes Sub-group (no badge shown) */}
+                      {useCases[cat.id].highStakes.length > 0 && (
+                        <div>
                           <button
-                            key={uc.id}
-                            onClick={() => {
-                              setSelectedUseCaseId(uc.id);
-                              setSelectedCategory(cat.id);
-                              if (window.innerWidth < 768) setIsSidebarOpen(false);
-                            }}
-                            className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-all flex items-center justify-between ${
-                              selectedUseCaseId === uc.id 
-                                ? 'bg-cyan-50 text-cyan-700 font-medium' 
-                                : 'hover:bg-slate-50 text-slate-600'
-                            }`}
+                            onClick={() => toggleSection(`${cat.id}-high`)}
+                            className="w-full px-2 py-1.5 text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex items-center justify-between hover:bg-slate-100 rounded transition-colors"
                           >
-                            <span className="flex items-center">
-                              {uc.title}
-                              <StakesBadge stakes={uc.stakes} />
+                            <span className="flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full"></span>
+                              Other Use Cases
+                              <span className="text-slate-400 font-normal">({useCases[cat.id].highStakes.length})</span>
                             </span>
-                            {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 text-cyan-500" />}
+                            <Icon 
+                              name={collapsedSections[`${cat.id}-high`] ? "ChevronRight" : "ChevronDown"} 
+                              className="w-3 h-3 text-slate-400" 
+                            />
                           </button>
-                        ))}
-                      </div>
+                          {!collapsedSections[`${cat.id}-high`] && (
+                            <div className="space-y-0.5 mt-1">
+                              {useCases[cat.id].highStakes.map((uc) => (
+                                <button
+                                  key={uc.id}
+                                  onClick={() => {
+                                    setSelectedUseCaseId(uc.id);
+                                    setSelectedCategory(cat.id);
+                                    if (window.innerWidth < 768) setIsSidebarOpen(false);
+                                  }}
+                                  className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-all flex items-center justify-between ${
+                                    selectedUseCaseId === uc.id 
+                                      ? 'bg-cyan-50 text-cyan-700 font-medium' 
+                                      : 'hover:bg-slate-50 text-slate-600'
+                                  }`}
+                                >
+                                  <span className="flex items-center">
+                                    {uc.title}
+                                  </span>
+                                  {selectedUseCaseId === uc.id && <Icon name="ChevronRight" className="w-4 h-4 text-cyan-500" />}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
